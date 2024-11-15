@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\SpiderController;
 
 // Test route
 Route::get('/test', function () {
@@ -24,4 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
             'user' => $request->user()
         ]);
     });
+
+    // Spider routes (protected)
+    Route::apiResource('spiders', SpiderController::class);
 });

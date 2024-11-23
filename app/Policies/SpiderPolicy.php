@@ -10,7 +10,7 @@ class SpiderPolicy
 {
     public function access(User $user, Spider $spider): Response
     {
-        return $user->id === $spider->user_id
+        return $user->id === $spider->userId
             ? Response::allow()
             : Response::deny('You do not own this spider.');
     }

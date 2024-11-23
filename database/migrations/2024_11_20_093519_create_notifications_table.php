@@ -6,15 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('spider_id');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            // Update the foreign key reference to use spiderId
+            $table->unsignedBigInteger('spider_id')->nullable();
+            $table->foreign('spider_id')
+                  ->references('spiderId')  // Changed from 'id' to 'spiderId'
+                  ->on('spiders')
+                  ->nullOnDelete();
             $table->string('notifName');
             $table->string('notifContent');
             $table->string('notifType');
@@ -22,10 +24,7 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('notifications');
     }

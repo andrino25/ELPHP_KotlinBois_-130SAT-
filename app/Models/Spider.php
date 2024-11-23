@@ -9,18 +9,21 @@ class Spider extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'spiderId';
+
     protected $fillable = [
-        'spiderSpecies',
+        'userId',
+        'spiderName',
+        'spiderImageRef',
+        'spiderSize',
+        'spiderEstimatedMarketValue',
         'spiderHealthStatus',
-        'spiderBuyCost',
-        'spiderSellPrice',
-        'spiderQuantity',
-        'spiderImageRef'
+        'spiderDescription'
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'userId');
     }
 
     public function notifications()

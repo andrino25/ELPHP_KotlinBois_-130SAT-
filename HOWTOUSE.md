@@ -143,7 +143,7 @@ Returns:
 ## USER EDIT PROFILE
 
 Request Type: POST<br>
-URL: https://ratatowi-api.vercel.app/api/api/user/edit<br>
+URL: https://gagambrawl-api.vercel.app/api/api/user/edit<br>
 Authorization: Bearer Token (from login response or register response)<br>
 Header:
 
@@ -198,28 +198,16 @@ Returns:
     Body:
     [
         {
-            "id": 1,
-            "user_id": 1,
-            "spiderSpecies": "Gagamboy",
-            "spiderHealthStatus": "Dying",
-            "spiderBuyCost": 5,
-            "spiderSellPrice": 7,
-            "spiderQuantity": 20,
+            "spiderId": 1,
+            "userId": 1,
+            "spiderName": "Mexican Red Knee",
+            "spiderHealthStatus": "Healthy",
+            "spiderSize": "Large",
+            "spiderEstimatedMarketValue": 150.00,
+            "spiderDescription": "A beautiful specimen with vibrant colors",
             "spiderImageRef": "https://i.ibb.co/r5c1Dqv/39dc4c94a6f3.jpg",
             "created_at": "2024-11-20T11:21:39.000000Z",
             "updated_at": "2024-11-20T11:21:39.000000Z"
-        },
-        {
-            "id": 2,
-            "user_id": 1,
-            "spiderSpecies": "Tarantula",
-            "spiderHealthStatus": "Dying",
-            "spiderBuyCost": 5,
-            "spiderSellPrice": 7,
-            "spiderQuantity": 20,
-            "spiderImageRef": "https://i.ibb.co/r5c1Dqv/39dc4c94a6f3.jpg",
-            "created_at": "2024-11-20T11:22:22.000000Z",
-            "updated_at": "2024-11-20T11:22:22.000000Z"
         },
         ...
     ]
@@ -227,7 +215,7 @@ Returns:
 ## SPIDER SHOW SINGLE
 
 Request Type: GET<br>
-https://gagambrawl-api.vercel.app/api/api/spiders/{id}<br>
+https://gagambrawl-api.vercel.app/api/api/spiders/{spiderId}<br>
 Authorization: Bearer Token (from login response or register response)<br>
 Header:
 
@@ -241,13 +229,13 @@ Returns:
     Response Code: 200
     Body:
     {
-        "id": 1,
-        "user_id": 1,
-        "spiderSpecies": "Gagamboy updated",
-        "spiderHealthStatus": "Healthy asdas",
-        "spiderBuyCost": 5,
-        "spiderSellPrice": 7,
-        "spiderQuantity": 20,
+        "spiderId": 1,
+        "userId": 1,
+        "spiderName": "Mexican Red Knee",
+        "spiderHealthStatus": "Healthy",
+        "spiderSize": "Large",
+        "spiderEstimatedMarketValue": 150.00,
+        "spiderDescription": "A beautiful specimen with vibrant colors",
         "spiderImageRef": "https://i.ibb.co/8g93CSr/51072fc1a54c.jpg",
         "created_at": "2024-11-20T11:21:39.000000Z",
         "updated_at": "2024-11-20T11:23:57.000000Z"
@@ -265,35 +253,35 @@ Header:
 
 Body: form-data
 
-    |----------KEY----------|---------VALUE---------|
-    |-spiderSpecies---------|-Main Course-----------| (required)
-    |-spiderHealthStatus----|-Creamy Tomato Soup----| (required)
-    |-spiderBuyCost---------|-5---------------------| (required)
-    |-spiderSellPrice-------|-9---------------------| (required)
-    |-spiderQuantity--------|-20--------------------| (required)
-    |-spiderImageRef--------|-(image file upload, only jpg/jpeg/jfif/png)---| (required)
+    |----------KEY------------------|---------VALUE---------|
+    |-spiderName-------------------|-Mexican Red Knee------| (required)
+    |-spiderHealthStatus-----------|-Healthy---------------| (required)
+    |-spiderSize-------------------|-Large-----------------| (required)
+    |-spiderEstimatedMarketValue---|-150.00----------------| (required)
+    |-spiderDescription------------|-A beautiful specimen--| (required)
+    |-spiderImageRef---------------|-(image file upload, only jpg/jpeg/png/svg)---| (required)
 
 Returns:
 
     Response Code: 200
     Body:
     {
-        "spiderSpecies": "Tarantula",
-        "spiderHealthStatus": "Dying",
-        "spiderBuyCost": "5",
-        "spiderSellPrice": "7",
-        "spiderQuantity": "20",
+        "spiderName": "Mexican Red Knee",
+        "spiderHealthStatus": "Healthy",
+        "spiderSize": "Large",
+        "spiderEstimatedMarketValue": "150.00",
+        "spiderDescription": "A beautiful specimen",
         "spiderImageRef": "https://i.ibb.co/r5c1Dqv/39dc4c94a6f3.jpg",
-        "user_id": 1,
+        "userId": 1,
         "updated_at": "2024-11-20T11:26:38.000000Z",
         "created_at": "2024-11-20T11:26:38.000000Z",
-        "id": 1
+        "spiderId": 1
     }
 
 ## SPIDER UPDATE
 
 Request Type: POST<br>
-URL: https://ratatowi-api.vercel.app/api/api/recipes/{id}<br>
+URL: https://gagambrawl-api.vercel.app/api/api/spiders/{spiderId}<br>
 Authorization: Bearer Token (from login response or register response)<br>
 Header:
 
@@ -302,26 +290,26 @@ Header:
 
 Body: form-data
 
-    |----------KEY----------|---------VALUE---------|
-    |-spiderSpecies---------|-Tarantula 2-----------| (optional)
-    |-spiderHealthStatus----|-Dead------------------| (optional)
-    |-spiderBuyCost---------|-5---------------------| (optional)
-    |-spiderSellPrice-------|-9---------------------| (optional)
-    |-spiderQuantity--------|-20--------------------| (optional)
-    |-spiderImageRef--------|-(image file upload, only jpg/jpeg/jfif/png)---| (optional)
+    |----------KEY------------------|---------VALUE---------|
+    |-spiderName-------------------|-Mexican Red Knee------| (optional)
+    |-spiderHealthStatus-----------|-Healthy---------------| (optional)
+    |-spiderSize-------------------|-Large-----------------| (optional)
+    |-spiderEstimatedMarketValue---|-150.00----------------| (optional)
+    |-spiderDescription------------|-A beautiful specimen--| (optional)
+    |-spiderImageRef---------------|-(image file upload, only jpg/jpeg/png/svg)---| (optional)
 
 Returns:
 
     Response Code: 200
     Body:
     {
-        "id": 1,
-        "user_id": 1,
-        "spiderSpecies": "Tarantula 2",
-        "spiderHealthStatus": "Dead",
-        "spiderBuyCost": "5",
-        "spiderSellPrice": "7",
-        "spiderQuantity": "20",
+        "spiderId": 1,
+        "userId": 1,
+        "spiderName": "Mexican Red Knee",
+        "spiderHealthStatus": "Healthy",
+        "spiderSize": "Large",
+        "spiderEstimatedMarketValue": "150.00",
+        "spiderDescription": "A beautiful specimen",
         "spiderImageRef": "https://i.ibb.co/8g93CSr/51072fc1a54c.jpg",
         "created_at": "2024-11-20T11:52:06.000000Z",
         "updated_at": "2024-11-20T11:54:04.000000Z"
@@ -330,7 +318,7 @@ Returns:
 ## SPIDER DELETE
 
 Request Type: DELETE<br>
-https://gagambrawl-api.vercel.app/api/api/spiders/{id}<br>
+https://gagambrawl-api.vercel.app/api/api/spiders/{spiderId}<br>
 Authorization: Bearer Token (from login response or register response)<br>
 Header:
 
@@ -344,7 +332,7 @@ Returns:
     Response Code: 200
     Body:
     {
-        "message": "Tarantula 2 deleted successfully"
+        "message": "Mexican Red Knee deleted successfully"
     }
 
 ## NOTIFICATIONS SHOW ALL

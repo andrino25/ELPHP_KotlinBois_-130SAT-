@@ -10,12 +10,13 @@ class Notification extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'spider_id',
         'notifName',
         'notifContent',
-        'notifType',
+        'notifType'
     ];
-
+    
     public function user()
     {
         return $this->belongsTo(User::class);

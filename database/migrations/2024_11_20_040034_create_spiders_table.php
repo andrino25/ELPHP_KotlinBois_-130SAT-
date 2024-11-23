@@ -9,14 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('spiders', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('spiderSpecies');
-            $table->string('spiderHealthStatus');
-            $table->float('spiderBuyCost');
-            $table->float('spiderSellPrice');
-            $table->integer('spiderQuantity');
+            $table->id('spiderId');
+            $table->foreignId('userId')->constrained('users')->cascadeOnDelete();
+            $table->string('spiderName');
             $table->string('spiderImageRef');
+            $table->string('spiderSize');
+            $table->decimal('spiderEstimatedMarketValue', 10, 2);
+            $table->string('spiderHealthStatus');
+            $table->text('spiderDescription');
             $table->timestamps();
         });
     }

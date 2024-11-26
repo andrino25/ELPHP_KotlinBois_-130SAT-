@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('spiderEstimatedMarketValue', 10, 2);
             $table->string('spiderHealthStatus');
             $table->text('spiderDescription');
+            $table->boolean('spiderIsFavorite')->default(false);
             $table->timestamps();
         });
     }

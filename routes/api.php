@@ -19,6 +19,6 @@ Route::get('/user/notifications', [AuthController::class, 'getNotifications'])->
 Route::apiResource('spiders', SpiderController::class)->middleware('auth:sanctum');
 Route::get('/catalogs', [CatalogController::class, 'index']);
 Route::get('/catalogs/{catalog}', [CatalogController::class, 'show']);
-Route::post('/catalogs', [CatalogController::class, 'store'])->middleware('auth:sanctum');
-Route::put('/catalogs/{catalog}', [CatalogController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('/catalogs/{catalog}', [CatalogController::class, 'destroy'])->middleware('auth:sanctum');
+Route::post('/catalogs', [CatalogController::class, 'store']);
+Route::put('/catalogs/{catalog}', [CatalogController::class, 'update']);
+Route::delete('/catalogs/{catalog}', [CatalogController::class, 'destroy']);

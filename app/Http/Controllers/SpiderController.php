@@ -27,8 +27,8 @@ class SpiderController extends Controller implements HasMiddleware
             $spiders = Spider::where('userId', $request->user()->id)->get();
             return response()->json($spiders, 200);
         } catch (\Exception $e) {
-            Log::error('Spider index error: ' . $e->getMessage());
-            return response()->json(['message' => 'Error fetching spiders'], 500);
+            Log::error('Error fetching spiders: ' . $e->getMessage());
+            return response()->json(['message' => 'Error fetching spiders', 'error' => $e->getMessage()]);
         }
     }
 
@@ -41,6 +41,7 @@ class SpiderController extends Controller implements HasMiddleware
             'spiderEstimatedMarketValue' => 'required|numeric',
             'spiderDescription' => 'required|string',
             'spiderImageRef' => 'required|image|mimes:jpeg,png,jpg,svg|max:512',
+            'spiderIsFavorite' => 'required|boolean'
         ]);
 
         if ($request->hasFile('spiderImageRef')) {
@@ -59,6 +60,7 @@ class SpiderController extends Controller implements HasMiddleware
                 'spiderEstimatedMarketValue' => $fields['spiderEstimatedMarketValue'],
                 'spiderDescription' => $fields['spiderDescription'],
                 'spiderImageRef' => $fields['spiderImageRef'],
+                'spiderIsFavorite' => $fields['spiderIsFavorite']
             ]);
 
             // Create success notification with spider_id
@@ -72,14 +74,13 @@ class SpiderController extends Controller implements HasMiddleware
             return response()->json($spider, 201);
         } catch (\Exception $e) {
             // Create error notification without spider_id
+            Log::error('Error storing spider: ' . $e->getMessage());
             $request->user()->notifications()->create([
                 'notifName' => 'Spider Storage Failed',
                 'notifContent' => 'Failed to store the spider.',
                 'notifType' => 'error'
             ]);
-
-            Log::error('Spider store error: ' . $e->getMessage());
-            return response()->json(['message' => 'Failed to store spider'], 500);
+            return response()->json(['message' => 'Failed to store spider', 'error' => $e->getMessage()]);
         }
     }
 
@@ -108,7 +109,8 @@ class SpiderController extends Controller implements HasMiddleware
                     'spiderSize' => 'sometimes|string',
                     'spiderEstimatedMarketValue' => 'sometimes|numeric',
                     'spiderDescription' => 'sometimes|string',
-                    'spiderImageRef' => 'sometimes|image|mimes:jpeg,png,jpg,svg|max:512'
+                    'spiderImageRef' => 'sometimes|image|mimes:jpeg,png,jpg,svg|max:512',
+                    'spiderIsFavorite' => 'sometimes|boolean'
                 ]);
 
                 // Handle image upload
@@ -124,7 +126,8 @@ class SpiderController extends Controller implements HasMiddleware
                     'spiderSize' => 'sometimes|string',
                     'spiderEstimatedMarketValue' => 'sometimes|numeric',
                     'spiderDescription' => 'sometimes|string',
-                    'spiderImageRef' => 'sometimes|string'  // Changed to string for JSON updates
+                    'spiderImageRef' => 'sometimes|string',  // Changed to string for JSON updates
+                    'spiderIsFavorite' => 'sometimes|boolean'
                 ]);
             }
 
@@ -139,9 +142,9 @@ class SpiderController extends Controller implements HasMiddleware
                     $spider->{$key} = $value;
                 }
             }
-            
+
             $spider->save();
-            
+
             // Create success notification
             $request->user()->notifications()->create([
                 'spider_id' => $spider->spiderId,
@@ -154,7 +157,7 @@ class SpiderController extends Controller implements HasMiddleware
         } catch (\Exception $e) {
             Log::error('Spider update error: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());
-            
+
             // Create error notification
             $request->user()->notifications()->create([
                 'notifName' => 'Spider Update Failed',
@@ -165,7 +168,7 @@ class SpiderController extends Controller implements HasMiddleware
             return response()->json([
                 'message' => 'Failed to update spider',
                 'error' => $e->getMessage()
-            ], 500);
+            ]);
         }
     }
 
@@ -189,14 +192,14 @@ class SpiderController extends Controller implements HasMiddleware
             return response()->json(['message' => "{$spiderName} deleted successfully"], 200);
         } catch (\Exception $e) {
             Log::error('Spider deletion error: ' . $e->getMessage());
-            
+
             $request->user()->notifications()->create([
                 'notifName' => 'Spider Deletion Failed',
                 'notifContent' => 'Failed to delete the spider.',
                 'notifType' => 'Error'  // Capitalized for consistency
             ]);
 
-            return response()->json(['message' => 'Failed to delete spider'], 500);
+            return response()->json(['message' => 'Failed to delete spider', 'error' => $e->getMessage()]);
         }
     }
 }

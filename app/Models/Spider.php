@@ -18,7 +18,8 @@ class Spider extends Model
         'spiderSize',
         'spiderEstimatedMarketValue',
         'spiderHealthStatus',
-        'spiderDescription'
+        'spiderDescription',
+        'spiderIsFavorite'
     ];
 
     public function user()

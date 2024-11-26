@@ -59,7 +59,7 @@ class SpiderSeeder extends Seeder
         // Distribute spiders among users
         foreach ($spiders as $index => $spiderData) {
             $user = $users[$index % count($users)];
-            
+
             Spider::create([
                 'userId' => $user->id,
                 'spiderName' => $spiderData['spiderName'],

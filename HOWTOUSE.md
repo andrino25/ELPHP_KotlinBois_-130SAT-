@@ -291,6 +291,7 @@ Header:
 Body: form-data
 
     |----------KEY------------------|---------VALUE---------|
+    |-_method----------------------|-PATCH-----------------| (optional)
     |-spiderName-------------------|-Mexican Red Knee------| (optional)
     |-spiderHealthStatus-----------|-Healthy---------------| (optional)
     |-spiderSize-------------------|-Large-----------------| (optional)

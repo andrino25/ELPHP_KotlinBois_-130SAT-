@@ -41,7 +41,7 @@ class SpiderController extends Controller implements HasMiddleware
             'spiderEstimatedMarketValue' => 'required|numeric',
             'spiderDescription' => 'required|string',
             'spiderImageRef' => 'required|image|mimes:jpeg,png,jpg,svg|max:512',
-            'spiderIsFavorite' => 'required|boolean'
+            'spiderIsFavorite' => 'required|integer|in:0,1'
         ]);
 
         if ($request->hasFile('spiderImageRef')) {
@@ -63,7 +63,7 @@ class SpiderController extends Controller implements HasMiddleware
                 'spiderIsFavorite' => $fields['spiderIsFavorite']
             ]);
 
-            // Create success notification with spider_id
+            // Create success notification
             $request->user()->notifications()->create([
                 'spider_id' => $spider->spiderId,
                 'notifName' => 'Spider Added',
@@ -71,9 +71,9 @@ class SpiderController extends Controller implements HasMiddleware
                 'notifType' => 'Creation'
             ]);
 
-            return response()->json($spider, 201);
+            return response()->json($spider, 200);
         } catch (\Exception $e) {
-            // Create error notification without spider_id
+            // Create error notification
             Log::error('Error storing spider: ' . $e->getMessage());
             $request->user()->notifications()->create([
                 'notifName' => 'Spider Storage Failed',
@@ -96,13 +96,10 @@ class SpiderController extends Controller implements HasMiddleware
         Gate::authorize('access', $spider);
 
         try {
-            // Log incoming content type for debugging
             Log::info('Content-Type:', ['type' => $request->header('Content-Type')]);
             Log::info('Request data:', $request->all());
 
-            // Validate based on content type
             if ($request->hasFile('spiderImageRef')) {
-                // Form-data validation
                 $fields = $request->validate([
                     'spiderName' => 'sometimes|string',
                     'spiderHealthStatus' => 'sometimes|string',
@@ -110,42 +107,37 @@ class SpiderController extends Controller implements HasMiddleware
                     'spiderEstimatedMarketValue' => 'sometimes|numeric',
                     'spiderDescription' => 'sometimes|string',
                     'spiderImageRef' => 'sometimes|image|mimes:jpeg,png,jpg,svg|max:512',
-                    'spiderIsFavorite' => 'sometimes|boolean'
+                    'spiderIsFavorite' => 'sometimes|integer|in:0,1'
                 ]);
 
-                // Handle image upload
                 $uploadedUrl = ImgBBHelper::uploadToImgBB($request->file('spiderImageRef'), $this->imgBBApiKey);
                 if ($uploadedUrl) {
                     $fields['spiderImageRef'] = $uploadedUrl;
                 }
             } else {
-                // JSON data validation
                 $fields = $request->validate([
                     'spiderName' => 'sometimes|string',
                     'spiderHealthStatus' => 'sometimes|string',
                     'spiderSize' => 'sometimes|string',
                     'spiderEstimatedMarketValue' => 'sometimes|numeric',
                     'spiderDescription' => 'sometimes|string',
-                    'spiderImageRef' => 'sometimes|string',  // Changed to string for JSON updates
-                    'spiderIsFavorite' => 'sometimes|boolean'
+                    'spiderImageRef' => 'sometimes|string', 
+                    'spiderIsFavorite' => 'sometimes|integer|in:0,1'
                 ]);
             }
 
-            // Convert spiderEstimatedMarketValue to numeric if present
             if (isset($fields['spiderEstimatedMarketValue'])) {
                 $fields['spiderEstimatedMarketValue'] = floatval($fields['spiderEstimatedMarketValue']);
             }
 
-            // Update fields
             foreach ($fields as $key => $value) {
-                if ($value !== null) {  // Only update non-null values
+                if ($value !== null) { 
                     $spider->{$key} = $value;
                 }
             }
 
             $spider->save();
 
-            // Create success notification
             $request->user()->notifications()->create([
                 'spider_id' => $spider->spiderId,
                 'notifName' => 'Spider Updated',
@@ -158,7 +150,6 @@ class SpiderController extends Controller implements HasMiddleware
             Log::error('Spider update error: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());
 
-            // Create error notification
             $request->user()->notifications()->create([
                 'notifName' => 'Spider Update Failed',
                 'notifContent' => 'Failed to update the spider.',
@@ -196,7 +187,7 @@ class SpiderController extends Controller implements HasMiddleware
             $request->user()->notifications()->create([
                 'notifName' => 'Spider Deletion Failed',
                 'notifContent' => 'Failed to delete the spider.',
-                'notifType' => 'Error'  // Capitalized for consistency
+                'notifType' => 'Error'
             ]);
 
             return response()->json(['message' => 'Failed to delete spider', 'error' => $e->getMessage()]);
